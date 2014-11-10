@@ -1,0 +1,65 @@
+'use strict';
+
+var NewStudentNode = require('./createGradeNode.js');
+
+var LList = function() {
+  this.head = new NewStudentNode('head');
+};
+
+LList.prototype.find = function(item) {
+  var currNode = this.head;
+  while (currNode.element !== item) {
+    currNode = currNode.next;
+  }
+  return currNode;
+};
+
+LList.prototype.insert = function(newElement, item) {
+  var newNode = new NewStudentNode(newElement);
+  var current = this.find(item);
+  newNode.next = current.next;
+  current.next = newNode;
+};
+
+LList.prototype.findPrevious = function(item) {
+  var currNode = this.head;
+  while ((currNode.next !== null) &&
+    (currNode.next.element !== item)) {
+    currNode = currNode.next;
+  }
+  return currNode;
+};
+
+LList.prototype.display = function() {
+  var currNode = this.head;
+  while (currNode.next !== null) {
+    console.log(currNode.next.element);
+    currNode = currNode.next;
+  }
+
+};
+LList.prototype.remove = function(item) {
+  var prevNode = this.findPrevious(item);
+  if (prevNode.next !== null) {
+    prevNode.next = prevNode.next.next;
+  }
+};
+
+LList.prototype.advancetoTail = function(n, item) {
+  if (n === 0) {
+    throw ('You haven\'t moved anywhere');
+  }
+  var currNode = this.find(item);
+  var temp = currNode;
+  for (var i = 0; i < n; i++) {
+    if (currNode.next === null) {
+      throw ('You are trying to move too far');
+    }
+    currNode = currNode.next;
+  }
+  this.remove(item);
+  temp.next = currNode.next;
+  currNode.next = temp;
+};
+
+module.exports = LList;
